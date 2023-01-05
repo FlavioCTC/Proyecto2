@@ -1,24 +1,49 @@
-function encriptar(){
-    const passSistema = "1234";
-    const msgError = "Contraseña Incorrecta";
-    var mensaje = document.getElementById("msg").value;
-    var password = document.getElementById("pass").value;
-    if(passSistema==password){
-        document.getElementById("error").innerHTML = "";
-        var encriptado = btoa(mensaje);
-        document.getElementById("demo1").innerHTML = encriptado;
-        document.getElementById("demo2").innerHTML = "";
-        document.getElementById("msgCodigo").value = "";
-    }else{
-        document.getElementById("error").innerHTML = msgError;
-        document.getElementById("demo1").innerHTML = "";
-        document.getElementById("msgCodigo").value = "";
-        document.getElementById("demo2").innerHTML = "";
-    }
+window.addEventListener("load",inicio,true);
+function inicio(){
+    document.getElementById("msg").addEventListener("keyup", function(){
+        this.value = this.value.toUpperCase();
+    },true);
+
+    document.getElementById("encriptar").addEventListener("click",function(){
+        let texto = document.getElementById("msg").value;
+        var desplazamiento = document.getElementById("desplazamiento").value;
+        encriptar(texto, desplazamiento);
+    },true)
+
+    document.getElementById("desencriptar").addEventListener("click",function(){
+        let texto = document.getElementById("msgCodigo").value;
+        var desplazamiento = document.getElementById("desplazamiento").value;
+        desencriptar(texto, desplazamiento);
+    },true)
 }
 
-function desencriptar(){
-    var mensajeCodigo = document.getElementById("msgCodigo").value;
-    var decrypted = atob(mensajeCodigo);
-    document.getElementById("demo2").innerHTML = decrypted;
+function encriptar(texto, desplazamiento){
+    if(!texto){
+        return ""
+    }
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    desplazamiento = (desplazamiento % 26 + 26) % 26;
+    var msgencriptado= texto.replace(/[A-Z]/ig, c => letras[(letras.indexOf(c)+desplazamiento)%26]);
+    document.getElementById("demo1").innerHTML=msgencriptado;
+    if(desplazamiento==""){
+        document.getElementById("error").innerHTML="No hay desplazamiento";
+    }else{
+        document.getElementById("error").innerHTML="";
+    }
+             
+}
+
+function desencriptar(texto, desplazamiento){
+    if(!texto){
+        return ""
+    }
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    desplazamiento = (desplazamiento % 26 - 26) % 26;
+    var msgdesencriptado = texto.replace(/[A-Z]/ig, c => letras[(letras.indexOf(c)-desplazamiento)%26]);
+    document.getElementById("demo2").innerHTML=msgdesencriptado;
+    if(desplazamiento==""){
+        document.getElementById("error").innerHTML="No hay desplazamiento"
+    }else{
+        document.getElementById("error").innerHTML="";
+    }
 }
